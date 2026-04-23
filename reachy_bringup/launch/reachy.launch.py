@@ -194,7 +194,9 @@ def launch_setup(context, *args, **kwargs):
         ],
         output="both",
         emulate_tty=True,
-        condition=IfCondition(PythonExpression(f"not {fake_py}")),
+        condition=IfCondition(
+            PythonExpression(f"not {fake_py} and not {gazebo_py} and not {mujoco_py}")
+        ),
         # Ensure the process is killed when the launch file is stopped
         sigterm_timeout="2",  # Grace period before sending SIGKILL (optional)
         sigkill_timeout="2",  # Time to wait after SIGTERM before sending SIGKILL (optional)
@@ -466,6 +468,7 @@ def launch_setup(context, *args, **kwargs):
         PythonLaunchDescriptionSource([FindPackageShare("reachy_gazebo"), "/launch", "/gazebo.launch.py"]),
         launch_arguments={
             "robot_config": f"{reachy_config.model}",
+            "world": LaunchConfiguration("world"),
         }.items(),
     )
     # For Gazebo simulation, we should not launch the controller manager (Gazebo does its own stuff)
@@ -635,6 +638,14 @@ def generate_launch_description():
                 description="Log level for needlessly verbose nodes",
                 choices=["DEBUG", "INFO", "WARN", "ERROR"],
             ),
+            DeclareLaunchArgument(
+                "world",
+                default_value=PathJoinSubstitution(
+                    [FindPackageShare("reachy_gazebo"), "worlds", "empty.world"]
+                ),
+                description="Gazebo world file to load in simulation",
+            ),
+
             OpaqueFunction(function=launch_setup),
         ]
     )
