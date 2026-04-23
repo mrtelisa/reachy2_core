@@ -508,7 +508,7 @@ def launch_setup(context, *args, **kwargs):
             sdk_server_video_node,
             orbbec_node,
             goto_server_node,
-            dynamic_state_router_node,
+            #dynamic_state_router_node,
             foxglove_bridge_node,
             rosbag,
         ]
