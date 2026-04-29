@@ -1,4 +1,6 @@
 import os
+from ament_index_python.packages import get_package_share_directory
+
 import shutil
 import signal
 import threading
@@ -101,7 +103,11 @@ def get_rviz_conf_choices() -> list[str]:
     """Lists all .rviz files in reachy_description/config, stripping the .rviz extension."""
 
     rviz_config_choices = []
-    for file in os.listdir(os.path.dirname(os.path.realpath(__file__)) + "/../../reachy_description/config"):
+    config_dir = os.path.join(
+        get_package_share_directory("reachy_description"),
+        "config",
+    )
+    for file in os.listdir(config_dir):
         if file.endswith(".rviz"):
             rviz_config_choices.append(file[:-5])
     return rviz_config_choices

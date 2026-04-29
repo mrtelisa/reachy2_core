@@ -10,6 +10,8 @@ from reachy_config.validate import validate
 ## help me do a better, commented, professional version of this file
 # config_file = os.path.expanduser("~/.reachy.yaml")
 
+from ament_index_python.packages import get_package_share_directory
+
 
 FULL_KIT, STARTER_KIT_RIGHT, STARTER_KIT_LEFT, HEADLESS, MINI = (
     "full_kit",
@@ -50,11 +52,11 @@ REACHY_CONFIG_PATH = os.path.expanduser("~/.reachy_config")
 
 class ReachyConfig:
     def __init__(self, custom_config_file_path="~/.reachy_config_override", no_print=False):
-        self.custom_config_dir = os.path.expanduser(custom_config_file_path)
+        self.custom_config_dir = get_package_share_directory("reachy_config")
         # in package/default
-        self.default_config_dir = os.path.dirname(os.path.realpath(__file__)) + "/../config/default"
-        self.fake_config_dir = os.path.dirname(os.path.realpath(__file__)) + "/../config/fake"
-        self.schema_config_dir = os.path.dirname(os.path.realpath(__file__)) + "/../config/schema"
+        self.default_config_dir = os.path.join(self.custom_config_dir, "config", "default")
+        self.fake_config_dir = os.path.join(self.custom_config_dir, "config", "fake")
+        self.schema_config_dir = os.path.join(self.custom_config_dir, "config", "schema")
         self.config = {}
         # create a logger object
         self.logger = get_logger()
