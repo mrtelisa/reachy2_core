@@ -84,6 +84,7 @@ def launch_setup(context, *args, **kwargs):
     verbose_logger_log_level_rl = LaunchConfiguration("log")
     mujoco_rl = LaunchConfiguration("mujoco")
     mujoco_py = mujoco_rl.perform(context) == "true"
+    world_rl = LaunchConfiguration("world")
 
     nodes = []
 
@@ -466,6 +467,7 @@ def launch_setup(context, *args, **kwargs):
         PythonLaunchDescriptionSource([FindPackageShare("reachy_gazebo"), "/launch", "/gazebo.launch.py"]),
         launch_arguments={
             "robot_config": f"{reachy_config.model}",
+            "world": world_rl,
         }.items(),
     )
     # For Gazebo simulation, we should not launch the controller manager (Gazebo does its own stuff)
@@ -490,12 +492,6 @@ def launch_setup(context, *args, **kwargs):
         [
             # *((control_node,) if not gazebo_py else (gazebo_node,)),  # SetUseSimTime does not seem to work...
             # fake_camera_node,
-            Node(
-                package="reachy_gazebo",
-                executable="fake_gz_interface",
-                output="screen",
-                parameters=[{"robot_config": reachy_config.model}],
-            ),
             robot_state_publisher_node,
             joint_state_broadcaster_spawner,
             delay_rviz_after_joint_state_broadcaster_spawner,
@@ -586,6 +582,11 @@ def generate_launch_description():
                 default_value="false",
                 description="Start a fake_hardware with gazebo as simulation tool.",
                 choices=["true", "false"],
+            ),
+            DeclareLaunchArgument(
+                "world",
+                default_value=[FindPackageShare("reachy_gazebo"), "/worlds/empty.world"],
+                description="Gazebo world to load.",
             ),
             DeclareLaunchArgument(
                 "mujoco",

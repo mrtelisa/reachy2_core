@@ -8,7 +8,8 @@ from launch_ros.substitutions import FindPackageShare
 
 def launch_setup(context, *args, **kwargs):
     robot_config = LaunchConfiguration("robot_config", default="full_kit")
-
+    world = LaunchConfiguration("world")
+    
     # Launch Gazebo
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -23,7 +24,7 @@ def launch_setup(context, *args, **kwargs):
         launch_arguments={
             "verbose": "false",
             "pause": "false",
-            "world": [FindPackageShare("reachy_gazebo"), "/worlds/empty.world"],
+            "world": world,
         }.items(),
     )
 
@@ -62,6 +63,7 @@ def generate_launch_description():
         [
             DeclareLaunchArgument("robot_name", default_value="reachy2", description="Set robot name."),
             DeclareLaunchArgument("robot_config", default_value="full_kit", description="Robot configuration."),
+            DeclareLaunchArgument("world", default_value=[FindPackageShare("reachy_gazebo"), "/worlds/empty.world"], description="Gazebo world to load."),
             OpaqueFunction(function=launch_setup),
         ]
     )
