@@ -194,7 +194,7 @@ def launch_setup(context, *args, **kwargs):
         ],
         output="both",
         emulate_tty=True,
-        condition=IfCondition(PythonExpression(f"not {fake_py}")),
+        condition=IfCondition(PythonExpression(f"not {fake_py} and not {gazebo_py} and not {mujoco_py}")),
         # Ensure the process is killed when the launch file is stopped
         sigterm_timeout="2",  # Grace period before sending SIGKILL (optional)
         sigkill_timeout="2",  # Time to wait after SIGTERM before sending SIGKILL (optional)
