@@ -1,3 +1,17 @@
+> **About this fork**
+>
+> Fork of [pollen-robotics/reachy2_core](https://github.com/pollen-robotics/reachy2_core), modified for the Gazebo simulation used in my Master's thesis ([reachy2_teleop_grasping_and_simulation](https://github.com/mrtelisa/reachy2_teleop_grasping_and_simulation), branch `new_protocol`).
+>
+> Changes on `develop`:
+> - **Custom Gazebo worlds:** a `world` launch argument in `reachy_bringup` and `reachy_gazebo`, so that the experiment scenarios (e.g. a room with obstacles) can be loaded instead of the empty world.
+> - **Launch adjustments** for running the simulation inside the Reachy 2 Docker container (EtherCAT activation conditions, configuration paths).
+>
+> The branch `feature/integrate-scenarios` contains a first, incomplete version of the scenario integration.
+>
+> The rest of this README is the original documentation by Pollen Robotics.
+
+---
+
 # Reachy2 Core
 
 This repository provides the core ROS 2 packages required to simulate, configure, and launch the **Reachy 2** humanoid robot. It includes URDF descriptions, launch files, Gazebo simulation assets, and control interfaces used across real and simulated platforms.
